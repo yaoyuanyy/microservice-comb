@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.0.RELEASE</version>
+    </parent>
+
+    <groupId>com.skyler.cobweb</groupId>
+    <artifactId>cobweb-comb</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>cobweb-comb</name>
+    <packaging>pom</packaging>
+    <description/>
+
+    <developers>
+        <developer>
+            <email>yaoyihao1@gmail.com</email>
+            <name>skyler</name>
+            <organizationUrl>https://github.com/yaoyuanyy</organizationUrl>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>cobweb-comb-base</module>
+        <module>cobweb-comb-web</module>
+        <module>cobweb-comb-admin</module>
+        <module>cobweb-comb-infrastructure</module>
+        <module>cobweb-comb-example</module>
+    </modules>
+    <properties>
+        <java.version>1.8</java.version>
+        <guava.version>25.1-jre</guava.version>
+        <commons-lang3.version>3.8.1</commons-lang3.version>
+        <mybatis-spring-boot-starter.version>2.0.1</mybatis-spring-boot-starter.version>
+        <springfox-swagger2.version>2.5.0</springfox-swagger2.version>
+        <mysql.version>5.1.44</mysql.version>
+        <commons-log.version>2.6.1</commons-log.version>
+        <zkclient.version>0.10</zkclient.version>
+        <zookeeper.version>3.4.9</zookeeper.version>
+        <lombok.version>1.18.6</lombok.version>
+        <beanutils.version>1.9.3</beanutils.version>
+        <spring.kafka.version>2.2.0.RELEASE</spring.kafka.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Greenwich.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${beanutils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox-swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox-swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>${spring.kafka.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>central</id>-->
+<!--            <name>Central Repository</name>-->
+<!--            <url>http://maven.aliyun.com/nexus/content/repositories/central</url>-->
+<!--            <layout>default</layout>-->
+<!--            &lt;!&ndash; <snapshots>-->
+<!--               <enabled>false</enabled>-->
+<!--             </snapshots>&ndash;&gt;-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--            <snapshots>-->
+<!--                <enabled>true</enabled>-->
+<!--            </snapshots>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+
+    <!--  发布项目到nexus仓库  -->
+    <!-- 这里的id必须和setting.xml文件中server的id值一一保持一致 -->
+    <distributionManagement>
+        <!-- Release包的管理 deploy打包时的version需要没有Snapshot字样 -->
+        <repository>
+            <id>releases</id>
+            <url>http://47.98.189.37:8081/repository/skyler-release/</url>
+        </repository>
+        <!-- Snapshot包的管理 -->
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>http://47.98.189.37:8081/repository/skyler-snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+
+</project>
