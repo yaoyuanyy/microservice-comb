@@ -8,13 +8,13 @@ skyler:
       consumer:
         topic: feign-info
         #        brokers:
-        #          - 10.26.15.22:9092
+        #          - 1.2.3.4:9092
         group-id: feign-info-group-id
 
 spring:
   kafka:
     consumer:
-      bootstrap-servers: 10.26.15.22:9092
+      bootstrap-servers: 1.2.3.4:9092
       group-id: feign-info-group-id
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

@@ -18,5 +18,5 @@ skyler:
       producer:
         topic: feign-info
         brokers:
-          - 10.26.15.22:9092
+          - 1.2.3.4:9092
 
