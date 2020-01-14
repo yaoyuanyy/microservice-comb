@@ -2,12 +2,37 @@ server:
   port: 9092
 
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://47.98.189.37:20282/eureka/
-    fetch-registry: true
-    register-with-eureka: true
-  instance:
-    prefer-ip-address: true
+skyler:
+  kafka:
+    config:
+      consumer:
+        topic: feign-info
+        #        brokers:
+        #          - 10.26.15.22:9092
+        group-id: feign-info-group-id
 
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: 10.26.15.22:9092
+      group-id: feign-info-group-id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?allowMultiQueries=true&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.jdbc.Driver
+    # Number of ms to wait before throwing an exception if no connection is available.
+    tomcat:
+      max-wait: 10000
+      # Maximum number of active connections that can be allocated from this pool at the same time.
+      max-active: 50
+      # Validate the connection before borrowing it from the pool.
+      test-on-borrow: true
+
+mybatis:
+  ## Locations of Mapper xml config file
+  mapperLocations: classpath*:com/skyler/**/mapper/*.xml

@@ -36,22 +36,5 @@ public class FeignMethodInfoHolder {
         private String toUrl;
         private String fromUrl;
         private String fromClass;
-
-
-//        public String getToApplication() {
-//            return toApplication;
-//        }
-//
-//        public void setToApplication(String toApplication) {
-//            this.toApplication = toApplication;
-//        }
-//
-//        public String getToUrl() {
-//            return toUrl;
-//        }
-//
-//        public void setToUrl(String toUrl) {
-//            this.toUrl = toUrl;
-//        }
     }
 }

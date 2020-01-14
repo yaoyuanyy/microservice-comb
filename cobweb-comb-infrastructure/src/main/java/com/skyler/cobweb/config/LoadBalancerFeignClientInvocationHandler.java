@@ -1,8 +1,14 @@
 package com.skyler.cobweb.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.skyler.cobweb.config.kafka.MessageSender;
+import com.skyler.cobweb.model.ServerInvocationInfo;
 import feign.Request;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -35,10 +41,19 @@ public class LoadBalancerFeignClientInvocationHandler implements InvocationHandl
     private LoadBalancerFeignClient loadBalancerFeignClient;
 
     /**
-     * kafka 生产者
+     * 消息发射器
      */
-    public LoadBalancerFeignClientInvocationHandler(LoadBalancerFeignClient loadBalancerFeignClient) {
+    private MessageSender messageSender;
+
+    /**
+     * 服务应用名称 default: spring.application.name的值
+     */
+    private String applicationName;
+
+    public LoadBalancerFeignClientInvocationHandler(LoadBalancerFeignClient loadBalancerFeignClient, MessageSender messageSender, String applicationName) {
         this.loadBalancerFeignClient = loadBalancerFeignClient;
+        this.messageSender = messageSender;
+        this.applicationName = applicationName;
     }
 
     @Override
@@ -51,27 +66,38 @@ public class LoadBalancerFeignClientInvocationHandler implements InvocationHandl
     private void handleArgs(Object[] args){
         try {
             if(Objects.nonNull(args) || args.length == ARGS_SIZE) {
+                String fromPath = "";
+                String toPath = "";
+                String toApplication = "";
+
                 if(args[0] instanceof Request){
                     Request request = (Request)args[0];
+                    // todo 解析request.url()为toApplication and toPath
+                    toApplication = request.url();
+                    toPath = request.url();
                     log.info("FeignLoaderBalanceInvocationHandler to application and url:" + request.url());
-                    // 解析request.url()为toApplication and toPath
-                }
-                if(args[1] instanceof Request.Options){
-                    Request.Options options = (Request.Options)args[1];
-                    log.info("FeignLoaderBalanceInvocationHandler options.readTimeoutMillis():" + options.readTimeoutMillis());
                 }
 
                 ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
                 if(Objects.nonNull(attributes)){
                     HttpServletRequest request = attributes.getRequest();
                     if(Objects.nonNull(request)) {
+                        fromPath = request.getRequestURI();
                         log.info("FeignLoaderBalanceInvocationHandler to application and url:" + request.getRequestURI());
                     }
                 }
+
+                // CQRS 发送kafka消息
+                messageSender.send(ServerInvocationInfo.builder()
+                        .fromApplication(applicationName)
+                        .fromPath(fromPath)
+                        .toApplication(toApplication)
+                        .toPath(toPath)
+                        .build());
             }
-            // CQRS 发送kafka消息
         } catch (Exception e) {
             log.warn("Exception:" + e);
+            // todo
             // 发邮件
             // 发短信
         } finally {
