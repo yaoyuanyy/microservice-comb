@@ -33,23 +33,18 @@
     </modules>
     <properties>
         <java.version>1.8</java.version>
-        <guava.version>25.1-jre</guava.version>
-        <commons-lang3.version>3.8.1</commons-lang3.version>
+         <commons-lang3.version>3.8.1</commons-lang3.version>
         <mybatis-spring-boot-starter.version>2.0.1</mybatis-spring-boot-starter.version>
-        <springfox-swagger2.version>2.5.0</springfox-swagger2.version>
         <mysql.version>5.1.44</mysql.version>
-        <commons-log.version>2.6.1</commons-log.version>
-        <zkclient.version>0.10</zkclient.version>
-        <zookeeper.version>3.4.9</zookeeper.version>
         <lombok.version>1.18.6</lombok.version>
+        <commons-log.version>2.6.1</commons-log.version>
         <beanutils.version>1.9.3</beanutils.version>
+        <!--   spring boot: 2.1 vv 2.2.x
+               spring boot: 2.2 vv 2.3.x
+         -->
         <spring.kafka.version>2.2.0.RELEASE</spring.kafka.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-
-    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -60,25 +55,19 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!--    spring集成 dependency-->
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>${spring.kafka.version}</version>
+            </dependency>
+
+            <!--    第三方 dependency-->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-spring-boot-starter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-beanutils</groupId>
-                <artifactId>commons-beanutils</artifactId>
-                <version>${beanutils.version}</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
@@ -86,19 +75,14 @@
                 <version>${mysql.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${springfox-swagger2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${springfox-swagger2.version}</version>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${beanutils.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -106,9 +90,9 @@
                 <version>4.4</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework.kafka</groupId>
-                <artifactId>spring-kafka</artifactId>
-                <version>${spring.kafka.version}</version>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
