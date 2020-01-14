@@ -27,23 +27,18 @@ public class SkylerExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected ResponseResult handleException(Exception ex) {
 
-        // 记录全局异常(包括业务主动抛出的异常)信息到log
         log.warn("ex:", ex);
 
         if (ex instanceof MethodArgumentNotValidException) {
-            //@Valid校验异常
-            return handleMethodArgumentNotValidException((MethodArgumentNotValidException) ex);
+             return handleMethodArgumentNotValidException((MethodArgumentNotValidException) ex);
         } else if (ex instanceof IllegalArgumentException) {
-            //checkArgument 业务校验异常
-            return handleIllegalArgumentException((IllegalArgumentException) ex);
+             return handleIllegalArgumentException((IllegalArgumentException) ex);
         } else if (ex instanceof ConstraintViolationException) {
-            //参数校验
-            return handleConstraintViolationException((ConstraintViolationException) ex);
+             return handleConstraintViolationException((ConstraintViolationException) ex);
         }
 
         logger.error("[ExceptionHandler 服务异常] ex:{}", ex.getMessage(), ex);
         if (ex instanceof BindException) {
-            //端口占用
             return handleBindExceptionException((BindException) ex);
         } else {
             return otherException(ex);
@@ -61,14 +56,12 @@ public class SkylerExceptionHandler {
         return new ResponseResult().fail(errorMsg);
     }
 
-    // @ExceptionHandler(MethodArgumentNotValidException.class)
-    private ResponseResult handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+     private ResponseResult handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         String message = message(ex.getBindingResult());
         return new ResponseResult().fail(message);
     }
 
-    // @ExceptionHandler(BindException.class)
-    private ResponseResult handleBindExceptionException(BindException ex) {
+     private ResponseResult handleBindExceptionException(BindException ex) {
         String message = message(ex.getBindingResult());
         return new ResponseResult().fail(message);
     }
