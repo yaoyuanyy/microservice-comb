@@ -8,9 +8,9 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @EnableEurekaClient
 @SpringBootApplication
-public class CobwebCombApplication {
+public class CobwebCombServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CobwebCombApplication.class, args);
+        SpringApplication.run(CobwebCombServerApplication.class, args);
     }
 }

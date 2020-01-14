@@ -26,7 +26,7 @@
 
     <modules>
         <module>cobweb-comb-base</module>
-        <module>cobweb-comb-web</module>
+        <module>cobweb-comb-server</module>
         <module>cobweb-comb-admin</module>
         <module>cobweb-comb-infrastructure</module>
         <module>cobweb-comb-example</module>
