@@ -22,19 +22,24 @@
             <artifactId>cobweb-comb-base</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
+        <!--    spring cloud dependency-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <!-- <scope>provided</scope>-->
         </dependency>
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
+
+        <!--    spring boot dependency-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <!--    spring 集成 dependency-->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
         </dependency>
     </dependencies>
     <build>
