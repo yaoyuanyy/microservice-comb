@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Param;
 /**
  * Description:
  * <pre>
- *
+ *    refer to
+ *    https://www.javaguides.net/2019/08/spring-boot-mybatis-mysql-example.html
+ *    https://segmentfault.com/a/1190000017211657
  * </pre>
  * NB.
  *
