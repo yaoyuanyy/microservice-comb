@@ -6,13 +6,26 @@ import java.util.Date;
 public class ServerInvocation implements Serializable {
     private Long id;
 
+    /**
+     * 调用服务名称
+     */
     private String fromApplication;
 
-    private String toApplication;
-
+    /**
+     * 调用服务接口path
+     */
     private String fromPath;
 
+    /**
+     * 被调用服务名称
+     */
+    private String toApplication;
+
+    /**
+     * 被调用服务接口path
+     */
     private String toPath;
+
 
     private String method;
 
