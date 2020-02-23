@@ -2,8 +2,6 @@ package com.skyler.cobweb.listener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.discovery.converters.Auto;
-import com.skyler.cobweb.config.KafkaConfigProperties;
 import com.skyler.cobweb.mybatis.mapper.ServerInvocationMapper;
 import com.skyler.cobweb.mybatis.model.ServerInvocation;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +9,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
