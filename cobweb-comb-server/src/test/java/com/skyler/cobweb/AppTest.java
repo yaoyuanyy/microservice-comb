@@ -2,6 +2,7 @@ package com.skyler.cobweb;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,9 +19,13 @@ import org.springframework.test.context.junit4.SpringRunner;
  * Created by skyler on 2019-07-29 at 19:47
  */
 @RunWith(SpringRunner.class)
-@ActiveProfiles("local")
-@SpringBootTest()
+@SpringBootTest(classes = {CobwebCombServerApplication.class})
+@ActiveProfiles("dev")
+@Slf4j
 public class AppTest {
 
     protected static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 }
+
+
+

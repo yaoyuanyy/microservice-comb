@@ -1,6 +1,6 @@
-package com.skyler.cobweb;
+package com.skyler.cobweb.storage;
 
-import com.skyler.cobweb.mybatis.ServerInvocation;
+import com.skyler.cobweb.mybatis.model.ServerInvocation2;
 
 /**
  * Description: 存储数据核心接口
@@ -14,5 +14,5 @@ import com.skyler.cobweb.mybatis.ServerInvocation;
  */
 public interface StorageData {
 
-    void save(ServerInvocation serverInvocation);
+    void save(ServerInvocation2 serverInvocation);
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skyler.cobweb.mybatis.mapper.ServerInvocationMapper">
+  <resultMap id="BaseResultMap" type="com.skyler.cobweb.mybatis.model.ServerInvocation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="from_application" jdbcType="VARCHAR" property="fromApplication" />
+    <result column="to_application" jdbcType="VARCHAR" property="toApplication" />
+    <result column="from_path" jdbcType="VARCHAR" property="fromPath" />
+    <result column="to_path" jdbcType="VARCHAR" property="toPath" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="utime" jdbcType="TIMESTAMP" property="utime" />
+    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from server_invocation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.skyler.cobweb.mybatis.model.ServerInvocation">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into server_invocation (from_application, to_application, from_path, 
+      to_path, `method`, ctime, 
+      utime, creator_id, create_name
+      )
+    values (#{fromApplication,jdbcType=VARCHAR}, #{toApplication,jdbcType=VARCHAR}, #{fromPath,jdbcType=VARCHAR}, 
+      #{toPath,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{utime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.skyler.cobweb.mybatis.model.ServerInvocation">
+    update server_invocation
+    set from_application = #{fromApplication,jdbcType=VARCHAR},
+      to_application = #{toApplication,jdbcType=VARCHAR},
+      from_path = #{fromPath,jdbcType=VARCHAR},
+      to_path = #{toPath,jdbcType=VARCHAR},
+      `method` = #{method,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      utime = #{utime,jdbcType=TIMESTAMP},
+      creator_id = #{creatorId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, from_application, to_application, from_path, to_path, `method`, ctime, 
+    utime, creator_id, create_name
+    from server_invocation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, from_application, to_application, from_path, to_path, `method`, ctime, 
+    utime, creator_id, create_name
+    from server_invocation
+  </select>
+</mapper>

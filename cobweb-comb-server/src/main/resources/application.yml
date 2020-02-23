@@ -7,14 +7,12 @@ skyler:
     config:
       consumer:
         topic: feign-info
-        #        brokers:
-        #          - 1.2.3.4:9092
-        group-id: feign-info-group-id
+        groupId: feign-info-group-id
 
 spring:
   kafka:
     consumer:
-      bootstrap-servers: 1.2.3.4:9092
+      bootstrap-servers: 47.98.189.37:9092
       group-id: feign-info-group-id
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -35,4 +33,4 @@ spring:
 
 mybatis:
   ## Locations of Mapper xml config file
-  mapperLocations: classpath*:com/skyler/**/mapper/*.xml
+  mapperLocations: classpath*:mapper/*.xml

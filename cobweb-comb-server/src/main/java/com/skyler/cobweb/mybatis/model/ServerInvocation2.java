@@ -1,4 +1,4 @@
-package com.skyler.cobweb.mybatis;
+package com.skyler.cobweb.mybatis.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServerInvocation {
+public class ServerInvocation2 {
 
     /**
      * 调用服务名称

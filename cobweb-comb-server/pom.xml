@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>cobweb-comb-server</artifactId>
-    <name>cobweb-comb-web</name>
+    <name>cobweb-comb-server</name>
     <description>controller</description>
 
     <properties>
@@ -79,6 +79,40 @@
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.6</version>
+                <!--<executions>-->
+                <!--<execution>-->
+                <!--<id>mybatis-generator</id>-->
+                <!--<phase>deploy</phase>-->
+                <!--<goals>-->
+                <!--<goal>generate</goal>-->
+                <!--</goals>-->
+                <!--</execution>-->
+                <!--</executions>-->
+                <configuration>
+                    <!-- Mybatis-Generator 工具配置文件的位置 -->
+                    <configurationFile>src/main/resources/mybatis-generator/generatorConfig.xml</configurationFile>
+                    <verbose>true</verbose>
+                    <overwrite>true</overwrite>
+                </configuration>
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>mysql</groupId>-->
+                        <!--<artifactId>mysql-connector-java</artifactId>-->
+                        <!--<version>5.1.44</version>-->
+                    <!--</dependency>-->
+                    <!--&lt;!&ndash;<dependency>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<groupId>org.mybatis.generator</groupId>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<artifactId>mybatis-generator-core</artifactId>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<version>1.3.2</version>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</dependency>&ndash;&gt;-->
+                <!--</dependencies>-->
+            </plugin>
+
             <!-- 上线部署插件 start -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>

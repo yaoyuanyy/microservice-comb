@@ -5,12 +5,11 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://47.98.189.37:20282/eureka/
+      defaultZone: http://47.98.189.37:20280/eureka/
     fetch-registry: true
     register-with-eureka: true
   instance:
     prefer-ip-address: true
-
 
 skyler:
   kafka:
@@ -18,5 +17,5 @@ skyler:
       producer:
         topic: feign-info
         brokers:
-          - 1.2.3.4:9092
+          - 47.98.189.37:9092
 

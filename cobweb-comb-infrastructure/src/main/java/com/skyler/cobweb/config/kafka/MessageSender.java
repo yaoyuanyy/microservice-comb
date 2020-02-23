@@ -52,6 +52,7 @@ public class MessageSender {
      * @throws JsonProcessingException
      */
     public void send(Object o, String topic) throws JsonProcessingException {
+        log.info("开始发送消息 topic:{} data:{}", topic, o);
         if(StringUtils.isBlank(topic)) {
             throw new RuntimeException("topic must be not null or empty");
         }
