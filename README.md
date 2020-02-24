@@ -36,7 +36,7 @@
 
 
 ## 项目结构
-https://github.com/yaoyuanyy/MarkdownPhotos/blob/master/img/20200224233602.png
+![项目结构图](https://github.com/yaoyuanyy/MarkdownPhotos/blob/master/img/20200224233602.png)
 
 |module|description|
 |--|--|
@@ -101,7 +101,7 @@ cobweb-comb-server
 
 3. 查看数据库数据
 如图所示
-https://github.com/yaoyuanyy/MarkdownPhotos/blob/master/img/20200224235045.png
+![数据库数据](https://github.com/yaoyuanyy/MarkdownPhotos/blob/master/img/20200224235045.png)
 
 
 ### 项目由来历程
