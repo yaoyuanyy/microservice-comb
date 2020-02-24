@@ -44,7 +44,6 @@
 |cobweb-comb-base|基础工具包,核心组件|
 |cobweb-comb-infrastructure|调用信息收集及发送,超核心组件|
 |cobweb-comb-server|接收并保存调用信息,核心组件|
-
 |cobweb-comb-server-a|模拟业务方服务，此模块引用cobweb-comb-b-sdk|
 |cobweb-comb-server-b|模拟业务方服务|
 |cobweb-comb-server-b-sdk|模拟业务方服务sdk，此模块引用cobweb-comb-infrastructure|
@@ -74,7 +73,7 @@ CREATE TABLE `server_invocation` (
   `creator_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '操作人id',
   `create_name` varchar(32) NOT NULL DEFAULT '' COMMENT '操作人姓名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='服务调用信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='服务调用信息表';
 ```
 
 ### 引用sdk
