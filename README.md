@@ -97,6 +97,7 @@ cobweb-comb-server
 ```
 
 2. 访问cobweb-comb-server-a接口
+
 `skyler@192 ~  curl -X GET 'localhost:9090/combo/getById?id=10'`
 
 3. 查看数据库数据
