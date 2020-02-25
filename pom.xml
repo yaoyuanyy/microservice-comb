@@ -10,9 +10,9 @@
     </parent>
 
     <groupId>com.skyler.cobweb</groupId>
-    <artifactId>cobweb-comb</artifactId>
+    <artifactId>microservice-comb</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>cobweb-comb</name>
+    <name>microservice-comb</name>
     <packaging>pom</packaging>
     <description/>
 
@@ -25,11 +25,11 @@
     </developers>
 
     <modules>
-        <module>cobweb-comb-base</module>
-        <module>cobweb-comb-server</module>
-        <module>cobweb-comb-admin</module>
-        <module>cobweb-comb-infrastructure</module>
-        <module>cobweb-comb-example</module>
+        <module>microservice-comb-base</module>
+        <module>microservice-comb-server</module>
+        <module>microservice-comb-admin</module>
+        <module>microservice-comb-infrastructure</module>
+        <module>microservice-comb-example</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

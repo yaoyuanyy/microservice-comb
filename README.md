@@ -1,4 +1,4 @@
-# cobweb-comb
+# microservice-comb
 
 ## 前言
 微服务已经在越来越多的企业开花。企业在享受微服务优势的同时，会产生一些问题。如随着企业的业务发展，相依的服务数量不断增加，服务调用关系越来越错综复杂。
@@ -26,13 +26,13 @@
 本项目分为三部分，一是调用信息收集及发送，二是接收并存储调用信息，三是图表展示微服务调用关系。调用信息的传递(发送和接收)采用的是`CQRS模型`
 
 1. 调用信息收集及发送
-这部分功能由`cobweb-comb-infrastructure`模块负责。具体原理为调用信息收集采用的是动态代理，通过代理`LoadBalancerFeignClient`类，使得有机会在服务调用时收集调用信息；并通过`kafka`发送调用信息给接收方。收集的逻辑通过自定义的`InvocationHandler：LoadBalancerFeignClientInvocationHandler`完成，发送调用信息通过`MessageSender`类完成。
+这部分功能由`microservice-comb-infrastructure`模块负责。具体原理为调用信息收集采用的是动态代理，通过代理`LoadBalancerFeignClient`类，使得有机会在服务调用时收集调用信息；并通过`kafka`发送调用信息给接收方。收集的逻辑通过自定义的`InvocationHandler：LoadBalancerFeignClientInvocationHandler`完成，发送调用信息通过`MessageSender`类完成。
 
 2. 接收并存储调用信息
-这部分功能由`cobweb-comb-server`模块负责。使用kafka接收调用信息，随之将信息持久化到硬盘，当前是保存到mysql数据库，后期会采用动态切换，支持mongodb等方式。
+这部分功能由`microservice-comb-server`模块负责。使用kafka接收调用信息，随之将信息持久化到硬盘，当前是保存到mysql数据库，后期会采用动态切换，支持mongodb等方式。
 
 3. 图表展示微服务调用关系
-这部分功能由`cobweb-comb-admin`模块负责。使用js等图表组件展示服务调用关系图，通过检索服务名/接口名可以知道：A服务的a接口的调用方信息，什么时间调的，一段时间内调用的次数等。但由于本人还不熟悉前端技术，暂时搁置这个模块。
+这部分功能由`microservice-comb-admin`模块负责。使用js等图表组件展示服务调用关系图，通过检索服务名/接口名可以知道：A服务的a接口的调用方信息，什么时间调的，一段时间内调用的次数等。但由于本人还不熟悉前端技术，暂时搁置这个模块。
 
 
 ## 项目结构
@@ -40,13 +40,13 @@
 
 |module|description|
 |--|--|
-|cobweb-comb-admin|调用信息图表展示,核心组件|
-|cobweb-comb-base|基础工具包,核心组件|
-|cobweb-comb-infrastructure|调用信息收集及发送,超核心组件|
-|cobweb-comb-server|接收并保存调用信息,核心组件|
-|cobweb-comb-server-a|模拟业务方服务，此模块引用cobweb-comb-b-sdk|
-|cobweb-comb-server-b|模拟业务方服务|
-|cobweb-comb-server-b-sdk|模拟业务方服务sdk，此模块引用cobweb-comb-infrastructure|
+|microservice-comb-admin|调用信息图表展示,核心组件|
+|microservice-comb-base|基础工具包,核心组件|
+|microservice-comb-infrastructure|调用信息收集及发送,超核心组件|
+|microservice-comb-server|接收并保存调用信息,核心组件|
+|microservice-comb-server-a|模拟业务方服务，此模块引用microservice-comb-b-sdk|
+|microservice-comb-server-b|模拟业务方服务|
+|microservice-comb-server-b-sdk|模拟业务方服务sdk，此模块引用microservice-comb-infrastructure|
 
 
 
@@ -77,11 +77,11 @@ CREATE TABLE `server_invocation` (
 ```
 
 ### 引用sdk
-将原来引用`spring-cloud-starter-openfeign`的模块或服务换成引用`cobweb-comb-infrastructure`，如下
+将原来引用`spring-cloud-starter-openfeign`的模块或服务换成引用`microservice-comb-infrastructure`，如下
 ```
 <dependency>
     <groupId>com.skyler.cobweb</groupId>
-    <artifactId>cobweb-comb-infrastructure</artifactId>
+    <artifactId>microservice-comb-infrastructure</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
@@ -90,12 +90,12 @@ CREATE TABLE `server_invocation` (
 ### 运行服务
 1. 运行服务
 ```
-cobweb-comb-server-a
-cobweb-comb-server-b
-cobweb-comb-server
+microservice-comb-server-a
+microservice-comb-server-b
+microservice-comb-server
 ```
 
-2. 访问cobweb-comb-server-a接口
+2. 访问microservice-comb-server-a接口
 
 `skyler@192 ~  curl -X GET 'localhost:9090/combo/getById?id=10'`
 
