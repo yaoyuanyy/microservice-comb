@@ -108,23 +108,23 @@
     </dependencyManagement>
 
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>central</id>-->
-<!--            <name>Central Repository</name>-->
-<!--            <url>http://maven.aliyun.com/nexus/content/repositories/central</url>-->
-<!--            <layout>default</layout>-->
-<!--            &lt;!&ndash; <snapshots>-->
-<!--               <enabled>false</enabled>-->
-<!--             </snapshots>&ndash;&gt;-->
-<!--            <releases>-->
-<!--                <enabled>true</enabled>-->
-<!--            </releases>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--        </repository>-->
-<!--    </repositories>-->
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://maven.aliyun.com/nexus/content/repositories/central</url>
+            <layout>default</layout>
+            <!-- <snapshots>
+               <enabled>false</enabled>
+             </snapshots>-->
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <!--  发布项目到nexus仓库  -->
     <!-- 这里的id必须和setting.xml文件中server的id值一一保持一致 -->
