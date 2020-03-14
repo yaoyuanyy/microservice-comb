@@ -1,3 +1,5 @@
+[toc]
+
 # microservice-comb
 
 ## 前言
@@ -122,4 +124,28 @@ microservice-comb-server
 
 3. 查看数据库数据
 如图所示
-![数据库数据](https://github.com/yaoyuanyy/MarkdownPhotos/blob/master/img/20200224235045.png)
+![20200314233501.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314233501.png)
+
+
+## 模拟企业实际应用
+microservice-comb-admin的功能负责展示数据库的服务间调用关系图。由于本人没有学习前端技术。效果暂时通过查询sql展示
+
+### 查看微服务下多个服务间调用关系
+![20200314233741.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314233741.png)
+
+
+- 查询cobweb-comb-server-b调用了哪些服务及接口
+```
+SELECT * FROM server_invocation WHERE from_application = 'cobweb-comb-server-b' 
+```
+结果如下图，
+![20200314234407.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314234407.png)
+
+Note: 支持展示精确到调用方法上，附加条件查询就好
+
+- 查询哪些服务及接口调用了cobweb-comb-server-b
+```
+SELECT * FROM server_invocation WHERE to_application = 'cobweb-comb-server-b' 
+```
+结果如下图
+![20200314234730.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314234730.png)
