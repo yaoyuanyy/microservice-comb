@@ -3,7 +3,7 @@
 ## 前言
 微服务已经在越来越多的企业开花。企业在享受微服务优势的同时，会产生一些问题。如随着企业的业务发展，相依的服务数量不断增加，服务调用关系越来越错综复杂。
 本项目产生的意义就是为了收集和展示服务的调用关系，特别是服务中接口的调用关系。带来的价值为很好的避免了以往只能通过开发人员头脑记忆，要知道记忆是会减退的。所以利于准备评估后续需求开发涉及的影响面。
-从而维护项目上线的稳定，增强服务可用性。为此，项目名称为_`微服务梳子`_
+从而维护项目上线的稳定，增强服务可用性。所以，项目name:`微服务梳子`。意在自动化理清微服务体系下的服务间关系调用
 
 ## 业务背景
 微服务架构的流行，在业务分隔，服务复用，敏捷开发等方面带来了很大的飞跃。随着业务场景越来越丰富，业务领域越来越广泛，服务数量越来越庞大。随之，服务间调用越来越错综复杂。
@@ -13,8 +13,10 @@
 具体说，假设服务A有一个接口a(其实a被3个上游其他的服务调用)，但是当前维护a接口的人员可能是新来的，或是时间太过久远而不一定能准确的知道调用a接口的上游服务。这就带来了诸多不确定性风险
 
 ## 本项目能带来什么
-为了准确的知道服务及其接口的调用方信息，本项目为此而出现。通过本项目，你可以准确的、实时的获取服务及其接口的被调用(使用)情况，从而帮助你准备的评估迭代需求的工作量，及时统计出更改所影响的上游服务方，拔高说增强了服务的可维护性和稳定性，提高了可用性
+为了准确的知道服务及其接口的调用方信息，本项目为此而出现。通过本项目，你可以准确的、实时的获取服务及其接口的被调用(使用)情况，从而帮助你准备的评估迭代需求的工作量，及时统计出更改所影响的上游服务方，拔高说增强了服务的可维护性和稳定性，提高了可用性。
 
+## 核心目标
+本项目意在提供简单快速的使用教程，真正的协助微服务架构模式下的服务维护成本，减少RD们对服务接口调动错乱的记忆，当然也告别前人留下的大坑。
 
 ## 架构图
 ![架构图](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200116114413.png)
@@ -44,17 +46,27 @@
 |microservice-comb-base|基础工具包,核心组件|
 |microservice-comb-infrastructure|调用信息收集及发送,超核心组件|
 |microservice-comb-server|接收并保存调用信息,核心组件|
-|microservice-comb-server-a|模拟业务方服务，此模块引用microservice-comb-b-sdk|
-|microservice-comb-server-b|模拟业务方服务|
-|microservice-comb-server-b-sdk|模拟业务方服务sdk，此模块引用microservice-comb-infrastructure|
+|microservice-comb-example|使用例子，模拟业务方服务|
+
+
+特别说明：
+```
+microservice-comb-example包含三个module。
+microservice-comb-server-a 模拟业务方服务，此模块引用microservice-comb-b-sdk
+microservice-comb-server-b 模拟业务方服务
+microservice-comb-server-b-sdk 模拟业务方服务sdk，此模块引用microservice-comb-infrastructure
+```
 
 
 
 ## 使用实例
 
-
 ## 使用方式
 使用很简单
+
+总体分两步：
+- 资源准备 
+- 引用sdk
 
 ### 资源准备 
 1. 调用信息发送和接收采用的kafka，所以你需要准备好运行着的`kafka server`，并把`kafka`的配置信息换成你的`kafka server信息
@@ -77,7 +89,7 @@ CREATE TABLE `server_invocation` (
 ```
 
 ### 引用sdk
-将原来引用`spring-cloud-starter-openfeign`的模块或服务换成引用`microservice-comb-infrastructure`，如下
+import源码后，通过mvn将microservice-comb-infrastructure打jar包, 然后引入到应用project中。将原来引用`spring-cloud-starter-openfeign`的模块或服务换成引用`microservice-comb-infrastructure`，如下
 ```
 <dependency>
     <groupId>com.skyler.cobweb</groupId>
@@ -87,8 +99,17 @@ CREATE TABLE `server_invocation` (
 ```
 
 
-### 运行服务
+## 模拟实战
+为方便使用和接入。microservice-comb-example模块提供了模拟实际公司中的微服务架构模式，microservice-comb-example包含三个子模块，整体关系为
+```
+microservice-comb-server-a依赖microservice-comb-b-sdk，因为microservice-comb-server-a需要调用sdk的feign接口
+microservice-comb-server-b依赖microservice-comb-b-sdk，因为microservice-comb-server-b的controller实现sdk的feign接口
+microservice-comb-b-sdk依赖microservice-comb-infrastructure
+```
+
 1. 运行服务
+
+依次运行如下服务
 ```
 microservice-comb-server-a
 microservice-comb-server-b
@@ -102,7 +123,3 @@ microservice-comb-server
 3. 查看数据库数据
 如图所示
 ![数据库数据](https://github.com/yaoyuanyy/MarkdownPhotos/blob/master/img/20200224235045.png)
-
-
-### 项目由来历程
-todo
