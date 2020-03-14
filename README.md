@@ -134,18 +134,22 @@ microservice-comb-admin的功能负责展示数据库的服务间调用关系图
 ![20200314233741.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314233741.png)
 
 
-- 查询cobweb-comb-server-b调用了哪些服务及接口
+### 查看微服务下多个服务间调用关系
+![20200314233741.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314233741.png)
+
+
+- 查询microservice-comb-server-b调用了哪些服务及接口
 ```
-SELECT * FROM server_invocation WHERE from_application = 'cobweb-comb-server-b' 
+SELECT * FROM server_invocation WHERE from_application = 'microservice-comb-server-b' 
 ```
 结果如下图，
-![20200314234407.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314234407.png)
+![20200314235524.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314235524.png)
 
 Note: 支持展示精确到调用方法上，附加条件查询就好
 
-- 查询哪些服务及接口调用了cobweb-comb-server-b
+- 查询哪些服务及接口调用了microservice-comb-server-b
 ```
-SELECT * FROM server_invocation WHERE to_application = 'cobweb-comb-server-b' 
+SELECT * FROM server_invocation WHERE to_application = 'microservice-comb-server-b' 
 ```
 结果如下图
-![20200314234730.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314234730.png)
+![20200314235605.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314235605.png)
