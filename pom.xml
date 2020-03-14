@@ -108,38 +108,38 @@
     </dependencyManagement>
 
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>central</id>-->
-<!--            <name>Central Repository</name>-->
-<!--            <url>http://maven.aliyun.com/nexus/content/repositories/central</url>-->
-<!--            <layout>default</layout>-->
-<!--            &lt;!&ndash; <snapshots>-->
-<!--               <enabled>false</enabled>-->
-<!--             </snapshots>&ndash;&gt;-->
-<!--            <releases>-->
-<!--                <enabled>true</enabled>-->
-<!--            </releases>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--        </repository>-->
-<!--    </repositories>-->
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://maven.aliyun.com/nexus/content/repositories/central</url>
+            <layout>default</layout>
+            <!-- <snapshots>
+               <enabled>false</enabled>
+             </snapshots>-->
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <!--  发布项目到nexus仓库  -->
     <!-- 这里的id必须和setting.xml文件中server的id值一一保持一致 -->
-    <distributionManagement>
-        <!-- Release包的管理 deploy打包时的version需要没有Snapshot字样 -->
-        <repository>
-            <id>releases</id>
-            <url>http://47.98.189.37:8081/repository/skyler-release/</url>
-        </repository>
-        <!-- Snapshot包的管理 -->
-        <snapshotRepository>
-            <id>snapshots</id>
-            <url>http://47.98.189.37:8081/repository/skyler-snapshot/</url>
-        </snapshotRepository>
-    </distributionManagement>
+<!--    <distributionManagement>-->
+<!--        &lt;!&ndash; Release包的管理 deploy打包时的version需要没有Snapshot字样 &ndash;&gt;-->
+<!--        <repository>-->
+<!--            <id>releases</id>-->
+<!--            <url>http://47.98.189.37:8081/repository/skyler-release/</url>-->
+<!--        </repository>-->
+<!--        &lt;!&ndash; Snapshot包的管理 &ndash;&gt;-->
+<!--        <snapshotRepository>-->
+<!--            <id>snapshots</id>-->
+<!--            <url>http://47.98.189.37:8081/repository/skyler-snapshot/</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
 
     <build>
         <plugins>
