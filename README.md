@@ -39,8 +39,6 @@
 
 
 ## 项目结构
-![项目结构图](https://github.com/yaoyuanyy/MarkdownPhotos/blob/master/img/20200224233602.png)
-
 |module|description|
 |--|--|
 |microservice-comb-admin|调用信息图表展示,核心组件|
@@ -70,9 +68,9 @@ microservice-comb-server-b-sdk 模拟业务方服务sdk，此模块引用microse
 - 引用sdk
 
 ### 资源准备 
-1. 调用信息发送和接收采用的kafka，所以你需要准备好运行着的`kafka server`，并把`kafka`的配置信息换成你的`kafka server信息
+1. kafka。调用信息发送和接收采用的kafka，所以你需要准备好运行着的`kafka server`，并把`kafka`的配置信息换成你的`kafka server信息
 
-2. 你需要有`mysql数据库`。`database: server_info`，并建表
+2. mysql。你需要有`mysql数据库`。`database: server_info`，并建表
 ```
 CREATE TABLE `server_invocation` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id，自增',
@@ -88,6 +86,8 @@ CREATE TABLE `server_invocation` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='服务调用信息表';
 ```
+3. eureka
+本项目是基于spring cloud体系，所以eureka是需要的
 
 ### 引用sdk
 import源码后，通过mvn将microservice-comb-infrastructure打jar包, 然后引入到应用project中。将原来引用`spring-cloud-starter-openfeign`的模块或服务换成引用`microservice-comb-infrastructure`，如下
@@ -123,18 +123,14 @@ microservice-comb-server
 
 3. 查看数据库数据
 如图所示
-![20200314233501.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314233501.png)
 
+![20200315002513.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200315002513.png)
 
 ## 模拟企业实际应用
 microservice-comb-admin的功能负责展示数据库的服务间调用关系图。由于本人没有学习前端技术。效果暂时通过查询sql展示
 
 ### 查看微服务下多个服务间调用关系
-![20200314233741.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314233741.png)
-
-
-### 查看微服务下多个服务间调用关系
-![20200314233741.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314233741.png)
+![20200315002437.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200315002437.png)
 
 
 - 查询microservice-comb-server-b调用了哪些服务及接口
@@ -152,3 +148,4 @@ SELECT * FROM server_invocation WHERE to_application = 'microservice-comb-server
 ```
 结果如下图
 ![20200314235605.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314235605.png)
+
