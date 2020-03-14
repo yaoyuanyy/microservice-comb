@@ -9,8 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>microservice-comb-agent</artifactId>
-
+    <artifactId>microservice-comb-javaagent</artifactId>
 
     <build>
         <plugins>
@@ -53,5 +52,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

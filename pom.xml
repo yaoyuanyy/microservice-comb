@@ -30,6 +30,7 @@
         <module>microservice-comb-admin</module>
         <module>microservice-comb-infrastructure</module>
         <module>microservice-comb-example</module>
+        <module>microservice-comb-javaagent</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
@@ -109,6 +110,7 @@
 
 
     <repositories>
+        <!-- 从远程maven仓库下载依赖jar包，与标签distributionManagement形成对比 -->
         <repository>
             <id>central</id>
             <name>Central Repository</name>
