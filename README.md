@@ -51,7 +51,7 @@
 特别说明：
 ```
 microservice-comb-example包含三个module。
-microservice-comb-server-a 模拟业务方服务，此模块引用microservice-comb-b-sdk
+microservice-comb-server-a 模拟业务方服务，此模块引用microservice-comb-server-b-sdk
 microservice-comb-server-b 模拟业务方服务
 microservice-comb-server-b-sdk 模拟业务方服务sdk，此模块引用microservice-comb-infrastructure
 ```
@@ -103,9 +103,9 @@ import源码后，通过mvn将microservice-comb-infrastructure打jar包, 然后�
 ## 模拟实战
 为方便使用和接入。microservice-comb-example模块提供了模拟实际公司中的微服务架构模式，microservice-comb-example包含三个子模块，整体关系为
 ```
-microservice-comb-server-a依赖microservice-comb-b-sdk，因为microservice-comb-server-a需要调用sdk的feign接口
-microservice-comb-server-b依赖microservice-comb-b-sdk，因为microservice-comb-server-b的controller实现sdk的feign接口
-microservice-comb-b-sdk依赖microservice-comb-infrastructure
+microservice-comb-server-a依赖microservice-comb-server-b-sdk，因为microservice-comb-server-a需要调用sdk的feign接口
+microservice-comb-server-b依赖microservice-comb-server-b-sdk，因为microservice-comb-server-b的controller实现sdk的feign接口
+microservice-comb-server-b-sdk依赖microservice-comb-infrastructure
 ```
 
 1. 运行服务
