@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class CobwebCombAdminApplication {
+public class CombAdminApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CobwebCombAdminApplication.class, args);
+        SpringApplication.run(CombAdminApplication.class, args);
     }
 }

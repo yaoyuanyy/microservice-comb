@@ -12,9 +12,9 @@ import org.springframework.kafka.annotation.EnableKafka;
 @SpringBootApplication
 @EnableKafka
 @MapperScan("com.skyler.cobweb.mybatis.mapper.**")
-public class CobwebCombServerApplication {
+public class CombServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CobwebCombServerApplication.class, args);
+        SpringApplication.run(CombServerApplication.class, args);
     }
 }

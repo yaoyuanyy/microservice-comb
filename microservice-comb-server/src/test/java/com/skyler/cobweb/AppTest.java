@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * Created by skyler on 2019-07-29 at 19:47
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {CobwebCombServerApplication.class})
+@SpringBootTest(classes = {CombServerApplication.class})
 @ActiveProfiles("dev")
 @Slf4j
 public class AppTest {
