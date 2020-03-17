@@ -1,4 +1,6 @@
-package com.skyler.cobweb.agent;
+package com.skyler.cobweb.agent.rumen;
+
+import com.skyler.cobweb.agent.javassist.Account;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,8 +25,13 @@ import java.util.List;
  */
 public class AgentTest {
     public static void main(String[] args) throws IOException {
+
+        Account account = new Account();
+        account.operation("test11");
+
         System.out.println(" ------ main方法");
 
+        Test t = new Test();
         // agentmain()方法的方式才需要以下代码
 //        List<VirtualMachineDescriptor> virtualMachineDescriptors =  VirtualMachine.list();
 //        for (VirtualMachineDescriptor virtualMachineDescriptor : virtualMachineDescriptors) {

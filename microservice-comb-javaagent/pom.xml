@@ -11,6 +11,24 @@
 
     <artifactId>microservice-comb-javaagent</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.26.0-GA</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.8.12</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-agent</artifactId>
+            <version>1.8.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -41,7 +59,7 @@
                     <archive>
                         <manifestEntries>
                             <!-- 值为包含premain方法的类. 启动方式为命令行启动时,javaagent JAR文件清单必须包含 Premain-Class 属性, 代理类必须实现 public static premain()-->
-                            <Premain-Class>com.skyler.cobweb.agent.AgentDemo</Premain-Class>
+                            <Premain-Class>com.skyler.cobweb.agent.javassist.shizhan.PerfMonAgent</Premain-Class>
                             <!-- 值为包含agentmain方法的类. 启动方式为JVM启动后启动时 文件清单必须包含 Agent-Class 属性, 代理类必须实现 public static agentmain() -->
                             <!--<Agent-Class>com.skyler.cobweb.agent.AgentDemo</Agent-Class>-->
                             <Can-Redefine-Classes>true</Can-Redefine-Classes>

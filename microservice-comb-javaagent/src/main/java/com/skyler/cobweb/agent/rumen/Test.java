@@ -1,4 +1,4 @@
-package com.skyler.cobweb.agent;
+package com.skyler.cobweb.agent.rumen;
 import java.lang.Object;
 
 /**
@@ -13,9 +13,5 @@ import java.lang.Object;
  */
 public class Test {
 
-    public static void main(String[] args) {
-        System.out.println("test");
-
-        Object o = new Object();
-    }
+    private int i = 0;
 }
