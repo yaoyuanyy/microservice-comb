@@ -1,4 +1,4 @@
-package com.skyler.cobweb.agent.javassist.shizhan;
+package com.skyler.cobweb.agent.javassist;
 
 /**
  * Description:
@@ -13,42 +13,55 @@ package com.skyler.cobweb.agent.javassist.shizhan;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
-import java.lang.reflect.Method;
 import java.security.ProtectionDomain;
+import java.util.Map;
 
-import com.skyler.cobweb.agent.rumen.AgentTest;
 import javassist.*;
+import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.AttributeInfo;
 import javassist.expr.ExprEditor;
-import javassist.expr.FieldAccess;
 import javassist.expr.MethodCall;
 
-public class PerfMonXformer implements ClassFileTransformer {
-private static int i = 0;
+/**
+ * 处理指定类的指定方法
+ */
+public class CombClassFileTransformer implements ClassFileTransformer {
+
+    private String args;
+
+    public CombClassFileTransformer() {}
+
+    public CombClassFileTransformer(String args) {
+        this.args = args;
+    }
+
+    private static final String TARGET_DIR = "com/skyler/cobweb/";
+    Map<String, String> map = Storage.map();
+
     @Override
     public byte[] transform(ClassLoader loader, String className,
                             Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) throws IllegalClassFormatException {
-        byte[] transformed = null;
 
-        if(className.contains("com/skyler/cobweb/a/web")){
+        if(className.startsWith(TARGET_DIR) && !className.contains("$$EnhancerBySpringCGLIB$$") && !className.contains("$$FastClassBySpringCGLIB$$")){
             ClassPool pool = ClassPool.getDefault();
             CtClass cl = null;
             try {
                 String realClassName = className.replaceAll("/", ".");
-                System.out.println("realClassName:" + realClassName);
-                //if(realClassName.contains("com.skyler.cobweb.a.web")){
+                System.out.println("启动参数args:" + args + " realClassName:" + realClassName);
                     cl = pool.get(realClassName);
                     if(!cl.isAnnotation()
                             && !cl.isInterface()
                             && !cl.isPrimitive()
                             && !cl.isArray()
-                            && !cl.isEnum()){
+                            && !cl.isEnum()
+                            && TargetAnnotations.hasTargetAnnotation(cl)){
 
                         CtField[] ctFields = cl.getDeclaredFields();
                         for (CtField ctField : ctFields) {
                             CtClass ctClassOfField = ctField.getType();
-                            if(ctClassOfField.hasAnnotation("org.springframework.cloud.openfeign.FeignClient")) {
-                                System.out.println("ctClassOfField name:" + ctClassOfField.getName() + "ctField name:"+ctField.getName());
+                            if(ctClassOfField.hasAnnotation(TargetAnnotations.FEIGN_CLIENT)) {
+                                System.out.println("ctClassOfField name:" + ctClassOfField.getName() + " ctField name:"+ctField.getName());
                                 CtMethod[] methods = cl.getDeclaredMethods();
                                 for (CtMethod ctMethod : methods) {
                                     if(!ctMethod.isEmpty()) {
@@ -59,17 +72,6 @@ private static int i = 0;
                         }
                     }
                 //}
-
-//                cl = pool.makeClass(new java.io.ByteArrayInputStream(classfileBuffer));
-//                if (cl.isInterface() == false) {
-//                    CtBehavior[] methods = cl.getDeclaredBehaviors();
-//                    for (int i = 0; i < methods.length; i++) {
-//                        if (methods[i].isEmpty() == false) {
-//                            doMethod(methods[i]);
-//                        }
-//                    }
-//                    transformed = cl.toBytecode();
-//                }
             } catch (Exception e) {
                 System.err.println("Could not instrument  " + className
                         + ",  exception : " + e.getMessage());
@@ -91,9 +93,16 @@ private static int i = 0;
                 if(classNameOfField.equals(m.getClassName())) {
                     System.out.println("wo jiu yao ni -> m:" + m.getClassName() + "." + m.getMethodName());
                     try {
-                        if(m.getMethod().hasAnnotation("org.springframework.web.bind.annotation.RequestMapping")){
+                        if(m.getMethod().hasAnnotation(TargetAnnotations.REQUEST_MAPPING)){
                             System.out.println("m.getMethod().getName():" + m.getMethod().getName());
-                            System.out.println("m.getMethod() annotation value:"+m.getMethod().getMethodInfo().getAttributes().get(1).toString());
+                            for (AttributeInfo attribute : m.getMethod().getMethodInfo().getAttributes()) {
+                                if(attribute instanceof AnnotationsAttribute) {
+                                    AnnotationsAttribute annotationsAttribute = (AnnotationsAttribute)attribute;
+                                    String value = annotationsAttribute.getAnnotation(TargetAnnotations.REQUEST_MAPPING).getMemberValue("value").toString();
+                                    map.put(classNameOfField, value);
+                                    System.out.println("m.getMethod() annotation value:" + value);
+                                }
+                            }
                         }
                     } catch (NotFoundException e) {
                         System.out.println("e:" + e);
@@ -105,11 +114,9 @@ private static int i = 0;
         });
     }
 
-    private void doMethod(CtBehavior method) throws NotFoundException,
-            CannotCompileException {
-        //method.insertBefore("long stime = System.nanoTime();");
-        System.out.println("method:" + method.getLongName());
+    private void doMethod(CtBehavior method) throws NotFoundException, CannotCompileException {
 
+        System.out.println("method:" + method.getLongName());
         method.instrument(new ExprEditor() {
             @Override
             public void edit(MethodCall m) throws CannotCompileException {

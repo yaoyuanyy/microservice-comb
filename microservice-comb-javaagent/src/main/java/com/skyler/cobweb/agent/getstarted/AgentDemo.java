@@ -1,4 +1,4 @@
-package com.skyler.cobweb.agent.rumen;
+package com.skyler.cobweb.agent.getstarted;
 
 import java.lang.instrument.Instrumentation;
 

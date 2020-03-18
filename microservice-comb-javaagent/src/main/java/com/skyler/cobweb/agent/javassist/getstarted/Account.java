@@ -1,4 +1,4 @@
-package com.skyler.cobweb.agent.javassist;
+package com.skyler.cobweb.agent.javassist.getstarted;
 
 /**
  * Description:

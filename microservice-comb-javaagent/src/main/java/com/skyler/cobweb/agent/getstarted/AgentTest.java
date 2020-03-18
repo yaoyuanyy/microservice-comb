@@ -1,9 +1,8 @@
-package com.skyler.cobweb.agent.rumen;
+package com.skyler.cobweb.agent.getstarted;
 
-import com.skyler.cobweb.agent.javassist.Account;
+import com.skyler.cobweb.agent.javassist.getstarted.Account;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Description:

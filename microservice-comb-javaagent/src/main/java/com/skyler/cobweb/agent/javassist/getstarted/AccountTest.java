@@ -1,4 +1,4 @@
-package com.skyler.cobweb.agent.javassist;
+package com.skyler.cobweb.agent.javassist.getstarted;
 
 /**
  * Description:
@@ -14,9 +14,6 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.bytecode.MethodInfo;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
 
 public class AccountTest {
 
