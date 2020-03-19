@@ -17,17 +17,17 @@
             <artifactId>javassist</artifactId>
             <version>3.26.0-GA</version>
         </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.8.12</version>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy-agent</artifactId>
-            <version>1.8.12</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.bytebuddy</groupId>-->
+<!--            <artifactId>byte-buddy</artifactId>-->
+<!--            <version>1.8.12</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>net.bytebuddy</groupId>-->
+<!--            <artifactId>byte-buddy-agent</artifactId>-->
+<!--            <version>1.8.12</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>
@@ -52,21 +52,34 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--  打jar包，并将依赖的dependencies打到jar包里         -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <!-- 值为包含premain方法的类. 启动方式为命令行启动时,javaagent JAR文件清单必须包含 Premain-Class 属性, 代理类必须实现 public static premain()-->
-                            <Premain-Class>com.skyler.cobweb.agent.javassist.CombAgent</Premain-Class>
-                            <!-- 值为包含agentmain方法的类. 启动方式为JVM启动后启动时 文件清单必须包含 Agent-Class 属性, 代理类必须实现 public static agentmain() -->
-                            <!--<Agent-Class>com.skyler.cobweb.agent.AgentDemo</Agent-Class>-->
-                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
-                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
-                        </manifestEntries>
-                    </archive>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                        <archive>
+                            <manifestEntries>
+                                <!-- 值为包含premain方法的类. 启动方式为命令行启动时,javaagent JAR文件清单必须包含 Premain-Class 属性, 代理类必须实现 public static premain()-->
+                                <Premain-Class>com.skyler.cobweb.agent.javassist.CombAgent</Premain-Class>
+                                <!-- 值为包含agentmain方法的类. 启动方式为JVM启动后启动时 文件清单必须包含 Agent-Class 属性, 代理类必须实现 public static agentmain() -->
+                                <!--<Agent-Class>com.skyler.cobweb.agent.AgentDemo</Agent-Class>-->
+                                <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                                <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                            </manifestEntries>
+                        </archive>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

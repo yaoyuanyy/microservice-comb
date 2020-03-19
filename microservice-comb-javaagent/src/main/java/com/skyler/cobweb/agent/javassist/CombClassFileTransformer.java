@@ -44,7 +44,13 @@ public class CombClassFileTransformer implements ClassFileTransformer {
                             byte[] classfileBuffer) throws IllegalClassFormatException {
 
         if(className.startsWith(TARGET_DIR) && !className.contains("$$EnhancerBySpringCGLIB$$") && !className.contains("$$FastClassBySpringCGLIB$$")){
+            System.out.println("className:" + className);
             ClassPool pool = ClassPool.getDefault();
+            System.out.println("pool:" + pool.toString());
+
+            pool.insertClassPath(new LoaderClassPath(loader));
+            System.out.println("hou:" + pool.toString());
+
             CtClass cl = null;
             try {
                 String realClassName = className.replaceAll("/", ".");
