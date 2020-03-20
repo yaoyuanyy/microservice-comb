@@ -1,9 +1,28 @@
 # microservice-comb
 
-## 前言
 微服务已经在越来越多的企业开花。企业在享受微服务优势的同时，会产生一些问题。如随着企业的业务发展，相依的服务数量不断增加，服务调用关系越来越错综复杂。
+
+以下对话是软件开发人员经常遇到的。
+场景一：我的接口都谁在调用呢
+```
+小张：小王，user服务的获取getById()接口被哪些服务使用呢？
+小王：原来业务不多的时候，我还知道。现在业务太复杂了，调用方太多，我已经记不清了。
+小张：那么办，我接了一个需求，涉及原接口逻辑的变动，这个接口的调用方都要评估下影响面
+小王：那你只能挨个负责服务的同事问下了
+小张：太麻烦了，时间都用在寻找调用方上了
+```
+
+场景二：我的服务都调了谁的服务的哪些接口
+```
+小赵：小马，我接手了一个product服务，为了尽量熟悉，我需要知道这个服务都依赖哪些服务，调了哪些接口？
+小马：这个···，服务有个wiki文档，你看看呢
+小赵：我看了，最新的更新时间是一年前
+小马：恐怕你只能翻代码了
+小赵：一行一行看代码!，我嚎哭
+```
+
 本项目产生的意义就是为了收集和展示服务的调用关系，特别是服务中接口的调用关系。带来的价值为很好的避免了以往只能通过开发人员头脑记忆，要知道记忆是会减退的。所以利于准备评估后续需求开发涉及的影响面。
-从而维护项目上线的稳定，增强服务可用性。所以，项目name:`微服务梳子`。意在自动化理清微服务体系下的服务间关系调用
+从而维护项目上线的稳定，增强服务可用性。`微服务梳子`意在自动化理清微服务体系下的服务间关系调用
 
 ## 业务背景
 微服务架构的流行，在业务分隔，服务复用，敏捷开发等方面带来了很大的飞跃。随着业务场景越来越丰富，业务领域越来越广泛，服务数量越来越庞大。随之，服务间调用越来越错综复杂。
@@ -38,8 +57,6 @@
 
 
 ## 项目结构
-![项目结构图](https://github.com/yaoyuanyy/MarkdownPhotos/blob/master/img/20200224233602.png)
-
 |module|description|
 |--|--|
 |microservice-comb-admin|调用信息图表展示,核心组件|
@@ -52,8 +69,8 @@
 特别说明：
 ```
 microservice-comb-example包含三个module。
-microservice-comb-server-a 模拟业务方服务，此模块引用microservice-comb-b-sdk
-microservice-comb-server-b 模拟业务方服务
+microservice-comb-server-a 模拟业务方服务，此模块引用microservice-comb-server-b-sdk
+microservice-comb-server-b 模拟业务方服务，此模块引用microservice-comb-server-b-sdk
 microservice-comb-server-b-sdk 模拟业务方服务sdk，此模块引用microservice-comb-infrastructure
 ```
 
@@ -69,9 +86,9 @@ microservice-comb-server-b-sdk 模拟业务方服务sdk，此模块引用microse
 - 引用sdk
 
 ### 资源准备 
-1. 调用信息发送和接收采用的kafka，所以你需要准备好运行着的`kafka server`，并把`kafka`的配置信息换成你的`kafka server信息
+1. kafka。调用信息发送和接收采用的kafka，所以你需要准备好运行着的`kafka server`，并把`kafka`的配置信息换成你的`kafka server信息
 
-2. 你需要有`mysql数据库`。`database: server_info`，并建表
+2. mysql。你需要有`mysql数据库`。`database: server_info`，并建表
 ```
 CREATE TABLE `server_invocation` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id，自增',
@@ -87,6 +104,8 @@ CREATE TABLE `server_invocation` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='服务调用信息表';
 ```
+3. eureka
+本项目是基于spring cloud体系，所以eureka是需要的
 
 ### 引用sdk
 import源码后，通过mvn将microservice-comb-infrastructure打jar包, 然后引入到应用project中。将原来引用`spring-cloud-starter-openfeign`的模块或服务换成引用`microservice-comb-infrastructure`，如下
@@ -102,9 +121,9 @@ import源码后，通过mvn将microservice-comb-infrastructure打jar包, 然后�
 ## 模拟实战
 为方便使用和接入。microservice-comb-example模块提供了模拟实际公司中的微服务架构模式，microservice-comb-example包含三个子模块，整体关系为
 ```
-microservice-comb-server-a依赖microservice-comb-b-sdk，因为microservice-comb-server-a需要调用sdk的feign接口
-microservice-comb-server-b依赖microservice-comb-b-sdk，因为microservice-comb-server-b的controller实现sdk的feign接口
-microservice-comb-b-sdk依赖microservice-comb-infrastructure
+microservice-comb-server-a依赖microservice-comb-server-b-sdk，因为microservice-comb-server-a需要调用sdk的feign接口
+microservice-comb-server-b依赖microservice-comb-server-b-sdk，因为microservice-comb-server-b的controller实现sdk的feign接口
+microservice-comb-server-b-sdk依赖microservice-comb-infrastructure
 ```
 
 1. 运行服务
@@ -122,4 +141,28 @@ microservice-comb-server
 
 3. 查看数据库数据
 如图所示
-![数据库数据](https://github.com/yaoyuanyy/MarkdownPhotos/blob/master/img/20200224235045.png)
+
+![20200315002513.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200315002513.png)
+
+## 模拟企业实际应用
+microservice-comb-admin的功能负责展示数据库的服务间调用关系图。由于本人没有学习前端技术。效果暂时通过查询sql展示
+
+### 查看微服务下多个服务间调用关系
+![20200315002437.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200315002437.png)
+
+
+- 查询microservice-comb-server-b调用了哪些服务及接口
+```
+SELECT * FROM server_invocation WHERE from_application = 'microservice-comb-server-b' 
+```
+结果如下图，
+![20200314235524.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314235524.png)
+
+Note: 支持展示精确到调用方法上，附加条件查询就好
+
+- 查询哪些服务及接口调用了microservice-comb-server-b
+```
+SELECT * FROM server_invocation WHERE to_application = 'microservice-comb-server-b' 
+```
+结果如下图
+![20200314235605.png](https://raw.githubusercontent.com/yaoyuanyy/MarkdownPhotos/master/img/20200314235605.png)
