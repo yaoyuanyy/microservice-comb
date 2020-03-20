@@ -1,6 +1,7 @@
 package com.skyler.cobweb.agent.javassist;
 
 import javassist.CtClass;
+import javassist.CtMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +22,18 @@ public class TargetAnnotations {
     public static final String REQUEST_MAPPING = "org.springframework.web.bind.annotation.RequestMapping";
 
     private static List<String> targetAnnotations;
+    private static List<String> targetRequestAnnotations;
 
     static {
         targetAnnotations = new ArrayList<>();
         targetAnnotations.add("org.springframework.web.bind.annotation.RestController");
         targetAnnotations.add("org.springframework.stereotype.Service");
         targetAnnotations.add("org.springframework.stereotype.Component");
+
+        targetRequestAnnotations = new ArrayList<>();
+        targetRequestAnnotations.add("org.springframework.web.bind.annotation.GetMapping");
+        targetRequestAnnotations.add("org.springframework.web.bind.annotation.PostMapping");
+        targetRequestAnnotations.add("org.springframework.web.bind.annotation.RequestMapping");
     }
 
     public static List<String> getTargetAnnotations() {
@@ -36,6 +43,19 @@ public class TargetAnnotations {
     public static boolean hasTargetAnnotation(CtClass cl) {
         for (String targetAnnotation : targetAnnotations) {
             if(cl.hasAnnotation(targetAnnotation)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static List<String> getTargetRequestAnnotations() {
+        return targetRequestAnnotations;
+    }
+
+    public static boolean hasTargetRequestAnnotation(CtMethod ctMethod) {
+        for (String targetRequestAnnotation : targetRequestAnnotations) {
+            if(ctMethod.hasAnnotation(targetRequestAnnotation)) {
                 return true;
             }
         }

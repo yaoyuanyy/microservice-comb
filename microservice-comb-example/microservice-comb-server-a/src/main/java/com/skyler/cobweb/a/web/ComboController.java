@@ -1,6 +1,7 @@
 package com.skyler.cobweb.a.web;
 
 import com.skyler.cobweb.b.client.ComboFeignClient;
+import com.skyler.cobweb.b.client.ProductFeignClient;
 import com.skyler.cobweb.b.dto.ComboDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,12 @@ public class ComboController {
     @Autowired
     private ComboFeignClient comboFeignClient;
 
+    @Autowired
+    private ProductFeignClient productFeignClient;
+
     @RequestMapping("/getById")
     public ComboDTO getById(Long id) {
+        productFeignClient.createProduct("productId");
         log.info("param id:{}", id);
         return comboFeignClient.getById(id);
     }
