@@ -14,10 +14,7 @@ package com.skyler.cobweb.agent.javassist;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import javassist.*;
 import javassist.bytecode.AnnotationsAttribute;
@@ -173,7 +170,8 @@ public class CombClassFileTransformer implements ClassFileTransformer {
      */
     private String resolveAnnotationForToPath(Annotation requestMappingAnnotation) {
         String toPath = null;
-        MemberValue memberValue = requestMappingAnnotation.getMemberValue("value");
+        MemberValue memberValue = Optional.ofNullable(requestMappingAnnotation.getMemberValue("value"))
+                .orElse(requestMappingAnnotation.getMemberValue("name"));
         if(Objects.nonNull(memberValue)){
             if(memberValue instanceof ArrayMemberValue) {
                 MemberValue[] memberValues = ((ArrayMemberValue)memberValue).getValue();
@@ -184,15 +182,9 @@ public class CombClassFileTransformer implements ClassFileTransformer {
                         toPath = memberValues[0].toString();
                     }
                 }
+            }else if(memberValue instanceof StringMemberValue) {
+                toPath = ((StringMemberValue)memberValue).getValue();
             }
-        }else {
-            memberValue = requestMappingAnnotation.getMemberValue("name");
-            if(Objects.nonNull(memberValue)) {
-                if(memberValue instanceof StringMemberValue) {
-                    toPath = ((StringMemberValue)memberValue).getValue();
-                }
-            }
-
         }
 
         return toPath;
