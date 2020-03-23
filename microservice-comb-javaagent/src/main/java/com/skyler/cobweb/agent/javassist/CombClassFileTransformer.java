@@ -202,8 +202,8 @@ public class CombClassFileTransformer implements ClassFileTransformer {
             Object[] objects = classOfField.getAnnotations();
             for (Object object : objects) {
                 String s = object.toString();
-                if(s.contains("FeignClient")) {
-                    toApplication = s;
+                if(s.contains(TargetAnnotations.FEIGN_CLIENT)) {
+                    toApplication = PatternUtil.match(s);
                     break;
                 }
             }

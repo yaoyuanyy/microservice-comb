@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author skyler
  * Created by on 2020-01-08 at 16:50
  */
-@FeignClient(name = "microservice-comb-server-b", contextId = "ComboFeignClient" )
+@FeignClient(contextId = "ComboFeignClient", value = "microservice-comb-server-b")
 public interface ComboFeignClient {
 
     @RequestMapping("/api/combo/getById")

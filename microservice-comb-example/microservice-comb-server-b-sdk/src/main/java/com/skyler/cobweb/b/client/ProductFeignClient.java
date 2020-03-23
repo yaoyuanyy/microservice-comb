@@ -26,7 +26,7 @@ public interface ProductFeignClient {
     @RequestMapping("/api/combo/getProductById")
     ProductDTO getProductById(@RequestParam("userId") Long userId);
 
-    @PostMapping("/api/combo/createProduct")
+    @PostMapping(name = "/api/combo/createProduct")
     @ApiOperation(value = "创建产品", notes = "创建产品")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "productId", value = "productId")
