@@ -24,11 +24,15 @@ import javassist.bytecode.annotation.MemberValue;
 import javassist.bytecode.annotation.StringMemberValue;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 处理指定类的指定方法
  */
 public class CombClassFileTransformer implements ClassFileTransformer {
+
+    Logger logger = LoggerFactory.getLogger(CombClassFileTransformer.class);
 
     /**
      * 可逗号分隔，每个index代表不同含义
@@ -85,8 +89,7 @@ public class CombClassFileTransformer implements ClassFileTransformer {
                     }
                 }
             } catch (Exception e) {
-                System.err.println("Could not instrument  " + className
-                        + ",  exception : " + e.getMessage());
+                logger.warn("Could not instrument " + className + ", exception : " + e.getMessage());
             } finally {
                 if (cl != null) {
                     cl.detach();
@@ -114,7 +117,8 @@ public class CombClassFileTransformer implements ClassFileTransformer {
                         try {
                             handleBodyOfMethod(targetMethod, methodCall, classOfField);
                         } catch (NotFoundException e) {
-                            System.out.println("e:" + e);
+                            logger.warn("handleBodyOfMethod报错 targetMethod " + targetMethod.getLongName()
+                                    + " methodCall: " + methodCall.getMethodName() + " ERROR:", e);
                         }
                     }
                 }
@@ -145,12 +149,10 @@ public class CombClassFileTransformer implements ClassFileTransformer {
                             // 得到访问服务名称
                             String toApplication = resolveClassOfFieldForFeignClient(classOfField);
                             map.put(classOfField.getName(), toPath);
-                            System.out.print("调用方application: " + commandLineArgs + " 调用类: " +targetMethod.getDeclaringClass().getName()
+                            logger.info("\n调用方application: " + commandLineArgs + " 调用类: " +targetMethod.getDeclaringClass().getName()
                                     +" \n调用方方法: " + targetMethod.getLongName()
                                     +" \n被调用方application: " + toApplication + " 被调用方: " + classOfField.getName()
                                     +" \n被调用方方法: " + methodCallOfTargetMethodBody.getClassName() + "." + methodCallOfTargetMethodBody.getMethodName() + " 对应路径: " + toPath +"\n");
-
-                            System.out.println("-----------------");
                         }
                     }
                 }
@@ -208,7 +210,7 @@ public class CombClassFileTransformer implements ClassFileTransformer {
                 }
             }
         } catch (ClassNotFoundException e) {
-            System.err.println("Error:" + e);
+            logger.warn("解析classOfField for FeignClient报错 ERROR:", e);
         }
         return toApplication;
     }
