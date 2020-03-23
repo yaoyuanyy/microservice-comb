@@ -21,8 +21,10 @@ import java.util.Objects;
 
 import javassist.*;
 import javassist.bytecode.AnnotationsAttribute;
-import javassist.bytecode.AttributeInfo;
 import javassist.bytecode.annotation.Annotation;
+import javassist.bytecode.annotation.ArrayMemberValue;
+import javassist.bytecode.annotation.MemberValue;
+import javassist.bytecode.annotation.StringMemberValue;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 
@@ -116,7 +118,6 @@ public class CombClassFileTransformer implements ClassFileTransformer {
                             handleBodyOfMethod(targetMethod, methodCall, classOfField);
                         } catch (NotFoundException e) {
                             System.out.println("e:" + e);
-                            e.printStackTrace();
                         }
                     }
                 }
@@ -134,40 +135,89 @@ public class CombClassFileTransformer implements ClassFileTransformer {
      */
     private void handleBodyOfMethod(CtMethod targetMethod, MethodCall methodCallOfTargetMethodBody, CtClass classOfField) throws NotFoundException {
         for (String targetRequestAnnotation : TargetAnnotations.getTargetRequestAnnotations()) {
-            if(methodCallOfTargetMethodBody.getMethod().hasAnnotation(targetRequestAnnotation)) {
-                for (AttributeInfo attribute : methodCallOfTargetMethodBody.getMethod().getMethodInfo().getAttributes()) {
-                    if(attribute instanceof AnnotationsAttribute) {
-                        AnnotationsAttribute annotationsAttribute = (AnnotationsAttribute)attribute;
-                        Annotation annotation = annotationsAttribute.getAnnotation(targetRequestAnnotation);
-                        if(Objects.nonNull(annotation)) {
-                            String value = annotation.getMemberValue("value").toString();
-                            if(null != value && !"".equals(value)) {
-                                String toApplication = null;
-                                try {
-                                    Object[] objects = classOfField.getAnnotations();
-                                    for (Object object : objects) {
-                                        String s = object.toString();
-                                        if(s.contains("FeignClient")) {
-                                            toApplication = s;
-                                            break;
-                                        }
-                                    }
-                                } catch (ClassNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-                                map.put(classOfField.getName(), value);
+            CtMethod methodOfTargetMethodBody = methodCallOfTargetMethodBody.getMethod();
+            if(methodOfTargetMethodBody.hasAnnotation(targetRequestAnnotation)) {
+                AnnotationsAttribute attribute = (AnnotationsAttribute)methodOfTargetMethodBody.getMethodInfo().getAttribute(AnnotationsAttribute.visibleTag);
+                if(Objects.nonNull(attribute)) {
+                    Annotation requestMappingAnnotation = attribute.getAnnotation(targetRequestAnnotation);
+                    if(Objects.nonNull(requestMappingAnnotation)) {
+                        // 得到访问路径
+                        String toPath = resolveAnnotationForToPath(requestMappingAnnotation);
+                        if(null != toPath && !"".equals(toPath)) {
 
-                                System.out.print("调用方application: " + commandLineArgs + " 调用类: " +targetMethod.getDeclaringClass().getName()
-                                        +" \n调用方方法: " + targetMethod.getLongName()
-                                        +" \n被调用方application: " + toApplication + " 被调用方: " + classOfField.getName()
-                                        +" \n被调用方方法: " + methodCallOfTargetMethodBody.getClassName() + "." + methodCallOfTargetMethodBody.getMethodName() + " 对应路径: " + value +"\n");
+                            // 得到访问服务名称
+                            String toApplication = resolveClassOfFieldForFeignClient(classOfField);
+                            map.put(classOfField.getName(), toPath);
+                            System.out.print("调用方application: " + commandLineArgs + " 调用类: " +targetMethod.getDeclaringClass().getName()
+                                    +" \n调用方方法: " + targetMethod.getLongName()
+                                    +" \n被调用方application: " + toApplication + " 被调用方: " + classOfField.getName()
+                                    +" \n被调用方方法: " + methodCallOfTargetMethodBody.getClassName() + "." + methodCallOfTargetMethodBody.getMethodName() + " 对应路径: " + toPath +"\n");
 
-                                System.out.println("-----------------");
-                            }
+                            System.out.println("-----------------");
                         }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * 解析以下注解
+     * <pre>
+     *   org.springframework.web.bind.annotation.GetMapping
+     *   org.springframework.web.bind.annotation.PostMapping
+     *   org.springframework.web.bind.annotation.RequestMapping
+     * </pre>
+     * @param requestMappingAnnotation
+     * @return
+     */
+    private String resolveAnnotationForToPath(Annotation requestMappingAnnotation) {
+        String toPath = null;
+        MemberValue memberValue = requestMappingAnnotation.getMemberValue("value");
+        if(Objects.nonNull(memberValue)){
+            if(memberValue instanceof ArrayMemberValue) {
+                MemberValue[] memberValues = ((ArrayMemberValue)memberValue).getValue();
+                if(memberValues.length > 0) {
+                    if(memberValues[0] instanceof StringMemberValue) {
+                        toPath = ((StringMemberValue)memberValues[0]).getValue();
+                    }else {
+                        toPath = memberValues[0].toString();
+                    }
+                }
+            }
+        }else {
+            memberValue = requestMappingAnnotation.getMemberValue("name");
+            if(Objects.nonNull(memberValue)) {
+                if(memberValue instanceof StringMemberValue) {
+                    toPath = ((StringMemberValue)memberValue).getValue();
+                }
+            }
+
+        }
+
+        return toPath;
+    }
+
+    /**
+     * 解析FeignClient注解
+     *
+     * @param classOfField
+     * @return
+     */
+    private String resolveClassOfFieldForFeignClient(CtClass classOfField) {
+        String toApplication = null;
+        try {
+            Object[] objects = classOfField.getAnnotations();
+            for (Object object : objects) {
+                String s = object.toString();
+                if(s.contains("FeignClient")) {
+                    toApplication = s;
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error:" + e);
+        }
+        return toApplication;
     }
 }
