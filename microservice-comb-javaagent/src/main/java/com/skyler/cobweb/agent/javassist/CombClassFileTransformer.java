@@ -31,15 +31,19 @@ import javassist.expr.MethodCall;
  */
 public class CombClassFileTransformer implements ClassFileTransformer {
 
-    private String args;
+    /**
+     * 可逗号分隔，每个index代表不同含义
+     */
+    private String commandLineArgs;
 
     public CombClassFileTransformer() {}
 
-    public CombClassFileTransformer(String args) {
-        this.args = args;
+    public CombClassFileTransformer(String commandLineArgs) {
+        this.commandLineArgs = commandLineArgs;
     }
 
     private static final String TARGET_DIR = "com/skyler/cobweb/";
+
     Map<String, String> map = Storage.map();
 
     @Override
@@ -50,6 +54,8 @@ public class CombClassFileTransformer implements ClassFileTransformer {
         if(className.startsWith(TARGET_DIR) && !className.contains("$$EnhancerBySpringCGLIB$$") && !className.contains("$$FastClassBySpringCGLIB$$")){
             ClassPool pool = ClassPool.getDefault();
             //pool.insertClassPath(new LoaderClassPath(loader));
+
+            // 业务目标类
             CtClass cl = null;
             try {
                 String realClassName = className.replaceAll("/", ".");
@@ -72,9 +78,9 @@ public class CombClassFileTransformer implements ClassFileTransformer {
 
                     if(ctClassOfFields != null && !ctClassOfFields.isEmpty()){
                         CtMethod[] methods = cl.getDeclaredMethods();
-                        for (CtMethod ctMethod : methods) {
-                            if(!ctMethod.isEmpty()) {
-                                handlerCtMethod(ctMethod, ctClassOfFields);
+                        for (CtMethod targetMethod : methods) {
+                            if(!targetMethod.isEmpty()) {
+                                handlerTargetMethod(targetMethod, ctClassOfFields);
                             }
                         }
                     }
@@ -92,65 +98,76 @@ public class CombClassFileTransformer implements ClassFileTransformer {
         return classfileBuffer;
     }
 
-    private void handlerCtMethod(CtMethod ctMethod, List<CtClass> classOfFields) throws CannotCompileException {
-        //System.out.println("method:" + ctMethod.getLongName());
-        ctMethod.instrument(new ExprEditor(){
+    /**
+     * 解析目标方法
+     *
+     * @param targetMethod
+     * @param classOfFields
+     * @throws CannotCompileException
+     */
+    private void handlerTargetMethod(CtMethod targetMethod, List<CtClass> classOfFields) throws CannotCompileException {
+        targetMethod.instrument(new ExprEditor(){
             @Override
-            public void edit(MethodCall m) throws CannotCompileException {
+            public void edit(MethodCall methodCall) throws CannotCompileException {
                 for (CtClass classOfField : classOfFields) {
                     String classNameOfField = classOfField.getName();
-                    if(classNameOfField.equals(m.getClassName())) {
+                    if(classNameOfField.equals(methodCall.getClassName())) {
                         try {
-//                        System.out.println(" ctClassOfField:" + classNameOfField
-//                                + " ctMethod:" + ctMethod.getName() + " m.getMethod():" + m.getMethod().getName());
-                            for (String targetRequestAnnotation : TargetAnnotations.getTargetRequestAnnotations()) {
-                                if(m.getMethod().hasAnnotation(targetRequestAnnotation)) {
-                                    for (AttributeInfo attribute : m.getMethod().getMethodInfo().getAttributes()) {
-                                        if(attribute instanceof AnnotationsAttribute) {
-                                            AnnotationsAttribute annotationsAttribute = (AnnotationsAttribute)attribute;
-                                            Annotation annotation = annotationsAttribute.getAnnotation(targetRequestAnnotation);
-                                            if(Objects.nonNull(annotation)) {
-                                                String value = annotation.getMemberValue("value").toString();
-                                                if(null != value && !"".equals(value)) {
-                                                    String toApplication = null;
-                                                    try {
-                                                        Object[] objects = classOfField.getAnnotations();
-                                                        for (Object object : objects) {
-                                                            String s = object.toString();
-                                                            if(s.contains("FeignClient")) {
-                                                                toApplication = s;
-                                                                break;
-                                                            }
-                                                        }
-                                                    } catch (ClassNotFoundException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    map.put(classNameOfField, value);
-
-                                                    System.out.print("调用方application: " + args + " 调用类: " +ctMethod.getDeclaringClass().getName()
-                                                            +" \n调用方方法: " + ctMethod.getLongName()
-                                                            +" \n被调用方application: " + toApplication + " 被调用方: " + classNameOfField
-                                                            +" \n被调用方方法: " + m.getClassName() + "." + m.getMethodName() + " 对应路径: " + value +"\n");
-
-                                                    System.out.println("-----------------");
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            handleBodyOfMethod(targetMethod, methodCall, classOfField);
                         } catch (NotFoundException e) {
                             System.out.println("e:" + e);
                             e.printStackTrace();
                         }
                     }
                 }
-
             }
-
-
         });
     }
-    private void handleMethod(CtMethod method) {
+
+    /**
+     * 处理目标方法的body体内容
+     *
+     * @param targetMethod 目标类的目标方法
+     * @param methodCallOfTargetMethodBody 目标方法的方法体内的语句调用
+     * @param classOfField 目标类的属性class集合
+     * @throws NotFoundException
+     */
+    private void handleBodyOfMethod(CtMethod targetMethod, MethodCall methodCallOfTargetMethodBody, CtClass classOfField) throws NotFoundException {
+        for (String targetRequestAnnotation : TargetAnnotations.getTargetRequestAnnotations()) {
+            if(methodCallOfTargetMethodBody.getMethod().hasAnnotation(targetRequestAnnotation)) {
+                for (AttributeInfo attribute : methodCallOfTargetMethodBody.getMethod().getMethodInfo().getAttributes()) {
+                    if(attribute instanceof AnnotationsAttribute) {
+                        AnnotationsAttribute annotationsAttribute = (AnnotationsAttribute)attribute;
+                        Annotation annotation = annotationsAttribute.getAnnotation(targetRequestAnnotation);
+                        if(Objects.nonNull(annotation)) {
+                            String value = annotation.getMemberValue("value").toString();
+                            if(null != value && !"".equals(value)) {
+                                String toApplication = null;
+                                try {
+                                    Object[] objects = classOfField.getAnnotations();
+                                    for (Object object : objects) {
+                                        String s = object.toString();
+                                        if(s.contains("FeignClient")) {
+                                            toApplication = s;
+                                            break;
+                                        }
+                                    }
+                                } catch (ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                map.put(classOfField.getName(), value);
+
+                                System.out.print("调用方application: " + commandLineArgs + " 调用类: " +targetMethod.getDeclaringClass().getName()
+                                        +" \n调用方方法: " + targetMethod.getLongName()
+                                        +" \n被调用方application: " + toApplication + " 被调用方: " + classOfField.getName()
+                                        +" \n被调用方方法: " + methodCallOfTargetMethodBody.getClassName() + "." + methodCallOfTargetMethodBody.getMethodName() + " 对应路径: " + value +"\n");
+
+                                System.out.println("-----------------");
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
