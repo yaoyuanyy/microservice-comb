@@ -38,7 +38,7 @@
         <mysql.version>5.1.44</mysql.version>
         <lombok.version>1.18.6</lombok.version>
         <commons-log.version>2.6.1</commons-log.version>
-        <beanutils.version>1.9.3</beanutils.version>
+        <beanutils.version>1.9.4</beanutils.version>
         <!--   spring boot: 2.1 vv 2.2.x
                spring boot: 2.2 vv 2.3.x
          -->
